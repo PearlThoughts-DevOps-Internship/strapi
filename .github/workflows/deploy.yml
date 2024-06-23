@@ -2,10 +2,10 @@ name: CI/CD for Strapi
 on:
   push:
     branches:
-      - main
+      - Haripriya
   pull_request:
     branches:
-      - main
+      - Haripriya
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
