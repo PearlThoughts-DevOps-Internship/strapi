@@ -1,0 +1,42 @@
+name: CI/CD for Strapi
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.HARIPRIYA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HARIPRIYA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Replace with your AWS region
+
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HARIPRIYA_EC2_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HARIPRIYA_EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Strapi Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HARIPRIYA_EC2_HOST }}
+          username: ${{ secrets.HARIPRIYA_EC2_USER }}
+          key: ${{ secrets.HARIPRIYA_EC2_KEY }}
+          script: |
+            set -e
+            yes | npx create-strapi-app@latest priya-strapi-project --quickstart --skip-cloud --no-run
+            cd ~/priya-strapi-project
+            pm2 start npm --name strapi-app -- run develop
+            pm2 save
