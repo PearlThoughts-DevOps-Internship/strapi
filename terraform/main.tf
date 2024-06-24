@@ -7,8 +7,9 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "ap-south-1c"  
 }
 
 resource "aws_internet_gateway" "main" {
@@ -56,22 +57,23 @@ resource "aws_security_group" "strapi_sg" {
 
 resource "aws_instance" "strapi" {
   ami                   = "ami-0f58b397bc5c1f2e8"
-  instance_type         = "t2.micro"
+  instance_type         = "t3.micro"  
   subnet_id             = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id] 
+  associate_public_ip_address = true
 
   user_data = <<-EOF
                 #!/bin/bash
                 sudo apt update
-                curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
-                sudo bash -E nodesource_setup.sh
-                sudo apt update && sudo apt install nodejs -y
-                sudo npm install -g yarn && sudo npm install -g pm2
-                echo -e "skip\n" | npx create-strapi-app simple-strapi --quickstart
-                cd simple-strapi
-                echo "const strapi = require('@strapi/strapi');
-                strapi().start();" > server.js
-                pm2 start server.js
+                sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+                sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+                sudo apt update
+                sudo apt install -y docker-ce
+                sudo systemctl start docker
+                sudo systemctl enable docker
+                sudo usermod -aG docker ubuntu
+                docker run -d -p 1337:1337 gayatri7mehta/my-strapi-app:0.0.2
               EOF
 
   tags = {
