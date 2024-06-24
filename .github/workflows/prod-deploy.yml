@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Deploy to LocalStack
 
 on:
   push:
@@ -18,12 +18,12 @@ jobs:
         with:
           terraform_version: 1.1.7
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+      - name: Configure LocalStack
+        run: |
+          echo "AWS_ACCESS_KEY_ID=test" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=test" >> $GITHUB_ENV
+          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+          echo "AWS_ENDPOINT_URL=http://localhost:4566" >> $GITHUB_ENV
 
       - name: Terraform Init
         working-directory: .github/environments/production
@@ -31,7 +31,7 @@ jobs:
 
       - name: Import Existing EC2 Instance
         working-directory: .github/environments/production
-        run: terraform import aws_instance.ar_strapi_docker || echo "Instance already imported"
+        run: terraform import aws_instance.ar_strapi_docker i-1234567890abcdef0 || echo "Instance already imported"
 
       - name: Terraform Plan
         working-directory: .github/environments/production
