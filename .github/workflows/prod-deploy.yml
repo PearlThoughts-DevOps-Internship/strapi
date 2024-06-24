@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - arka-prod
+      - arka-localstack
 
 jobs:
   terraform:
