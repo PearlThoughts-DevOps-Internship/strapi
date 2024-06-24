@@ -1,4 +1,4 @@
-name: Terraform_automated
+name: Terraform_automated_workflow
 on:
   push:
     branches:
