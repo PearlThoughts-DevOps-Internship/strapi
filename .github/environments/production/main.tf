@@ -1,9 +1,23 @@
 provider "aws" {
-  region = "ap-south-1"
+  region                      = "ap-south-1"
+  access_key                  = "test"
+  secret_key                  = "test"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+
+  endpoints {
+    ec2            = "http://localhost:4566"
+    iam            = "http://localhost:4566"
+    s3             = "http://localhost:4566"
+    sts            = "http://localhost:4566"
+    dynamodb       = "http://localhost:4566"
+    cloudwatch     = "http://localhost:4566"
+    cloudformation = "http://localhost:4566"
+  }
 }
 
 data "aws_vpc" "default" {
-  default = true
+  id = "vpc-12345678" # Use a hardcoded VPC ID for LocalStack
 }
 
 data "aws_subnets" "default" {
@@ -52,7 +66,7 @@ resource "aws_security_group" "strapi_sg" {
 }
 
 resource "aws_instance" "ar_strapi_docker" {
-  ami           = "ami-0f58b397bc5c1f2e8"
+  ami           = "ami-12345678" # Use a hardcoded AMI ID for LocalStack
   instance_type = "t2.medium"
   subnet_id     = data.aws_subnet.first.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
