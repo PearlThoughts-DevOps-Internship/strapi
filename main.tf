@@ -46,6 +46,9 @@ resource "aws_instance" "strapi-server" {
 
     # Install necessary packages
     sudo apt-get install -y nodejs npm git
+    
+    # Install PM2
+    sudo npm install -g pm2
 
     # Clone Strapi repository (replace with your actual URL)
     git clone https://github.com/PearlThoughts-DevOps-Internship/strapi /srv/strapi
