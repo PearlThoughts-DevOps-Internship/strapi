@@ -2,6 +2,10 @@
 
 Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
 
+![image](https://github.com/PearlThoughts-DevOps-Internship/strapi/assets/111784343/a288bd48-cb45-4267-b486-e87933f73335)
+
+STRAPI WITH SQLLITE DB 
+
 ### `develop`
 
 Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
