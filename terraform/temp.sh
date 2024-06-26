@@ -19,20 +19,18 @@ sudo npm install -g pm2
 pwd
 ls -la
 # Create the /srv directory if it doesn't exist
-mkdir -p /home/ubuntu/srv
-pwd
-ls -la
-sudo chown -R ubuntu:ubuntu /home/ubuntu/srv
-pwd
-ls -la
-cd /home/ubuntu/srv/
+# mkdir -p /home/ubuntu/srv
+# pwd
+# ls -la
+# sudo chown -R ubuntu:ubuntu /home/ubuntu/srv
+# pwd
+# ls -la
+# cd /home/ubuntu/srv/
+
+cd /srv/
 pwd
 ls -la
 
-# Create a new Strapi project in the /srv directory
-# echo -e "skip\n" | npx create-strapi-app strapi --quickstart --no-run
-
-# cd strapi
 
 git clone https://github.com/harshit3355/Strapi_template.git
 pwd
