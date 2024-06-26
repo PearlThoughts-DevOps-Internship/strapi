@@ -5,10 +5,10 @@ on:
     workflows: ["Terraform manual start"]
     types:
       - completed
-  # push:
-  #   branches: [ "somesh" ]
-  # pull_request:
-  #   branches: [ "somesh" ]
+  push:
+    branches: [ "somesh" ]
+  pull_request:
+    branches: [ "somesh" ]
 
 jobs:
   deploy:
