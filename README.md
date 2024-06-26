@@ -4,8 +4,10 @@
 VPC
 EC2
 * Creat Github Action Workflow to which create Infrastructure by installing Terraform on the server.
+  
 **Troubleshooting:**
-clone strapi code from repo : https://github.com/safaira/strapi.git
+strapi repo : https://github.com/safaira/strapi.git
+
 when I run npm start it gives me error:
 **error:**
 Middleware "strapi::session": App keys are required. Please set app.keys in config/server.js (ex: keys: ['myKeyA', 'myKeyB']) Error: Middleware "strapi::session": App keys are required. Please set 
