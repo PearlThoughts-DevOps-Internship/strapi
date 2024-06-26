@@ -8,7 +8,7 @@ EC2
 **Troubleshooting:**
 strapi repo : https://github.com/safaira/strapi.git
 
-when I run npm start it gives me error:
+when I run "npm start" it gives error:
 
 **error:**
 Middleware "strapi::session": App keys are required. Please set app.keys in config/server.js (ex: keys: ['myKeyA', 'myKeyB']) Error: Middleware "strapi::session": App keys are required. Please set 
