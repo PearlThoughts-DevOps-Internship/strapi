@@ -25,12 +25,10 @@ jobs:
           terraform_wrapper: false
 
       - name: Configure AWS Credentials
-        env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.saniya_AWS_ACCESS_KEY }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.saniya_AWS_SECRET_ACCESS_KEY }}
-          
-        run: |
-            echo "AWS credentials configured"
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            
       - name: Terraform Init
         id: init
