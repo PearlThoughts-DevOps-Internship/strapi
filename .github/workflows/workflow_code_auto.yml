@@ -33,12 +33,12 @@ jobs:
         
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ${USERNAME}@${HOST} '
-            cd ~/my-strapi-project &&
+            cd strapi/ &&
             git fetch origin &&  
             git reset --hard origin/somesh && 
             yarn install &&
             yarn build &&
-            pm2 restart strapi-app 
+            pm2 restart strapi || pm2 start npm --name strapi -- run start 
           '
           
           
