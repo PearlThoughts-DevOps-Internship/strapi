@@ -4,8 +4,8 @@ provider "aws" {
 }
 
 # Create a security group with descriptive names
-resource "aws_security_group" "strapi_app_sg" {
-  name        = "strapi-application-security-group"
+resource "aws_security_group" "strapi_app" {
+  name        = "strapi-application-security"
   description = "Security group for Strapi application access"
 
   ingress {
@@ -32,9 +32,9 @@ resource "aws_security_group" "strapi_app_sg" {
 
 # Create an EC2 instance referencing the security group
 resource "aws_instance" "strapi-server" {
-  ami           = "ami-05e00961530ae1b55"  # Replace with a suitable AMI
+  ami           = "ami-0f58b397bc5c1f2e8"  # Replace with a suitable AMI
   instance_type = "t2.micro"             # Adjust based on resource requirements
-  vpc_security_group_ids = ["sg-0dba8dc443a23f48e"]
+  vpc_security_group_ids = ["sg-0920fa5cfd5d5dd5c"]
 
   # User data script to install packages, clone repo, configure PM2, etc.
   user_data = <<EOF
