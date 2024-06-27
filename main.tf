@@ -1,6 +1,5 @@
 # Configure Terraform provider (e.g., AWS)
 provider "aws" {
-  profile = "strapi-profile"  # Assuming you have a profile configured
   region  = "ap-south-1"      # Replace with your desired region
 }
 
