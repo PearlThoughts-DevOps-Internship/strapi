@@ -5,7 +5,7 @@ provider "aws" {
 
 # Create a security group with descriptive names
 resource "aws_security_group" "strapi_app1" {
-  name        = "strapi-application-security"
+  name        = "strapi-application"
   description = "Security group for Strapi application access"
 
   ingress {
