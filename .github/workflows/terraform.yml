@@ -15,6 +15,9 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+    
+    - name: Git Pull
+      run: git pull origin Adam
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
