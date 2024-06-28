@@ -13,14 +13,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Deploy application
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: '18'
-          npm-version: '10'
-      
-      - name: Install dependencies
-        run: npm install
-      
-      - name: Build npm
-        run: npm run build
+          host: ${{ secrets.MAHESHR_SSH_HOST }}
+          username: ${{ secrets.MAHESHR_USER_NAME }}
+          key: ${{ secrets.MAHESHR_PRIVATE_KEY }}
+          port: ${{ secrets.MAHESHR_SSH_PORT }}
+          script: |
+            cd /srv/strapi && \
+            git checkout -f mahesh-prod && \
+            git pull origin mahesh-prod && \
+            echo "HOST=${{ secrets.MAHESHR_HOST }}" > .env && \
+            echo "PORT=${{ secrets.MAHESHR_PORT }}" >> .env && \
+            echo "APP_KEYS=${{ secrets.MAHESHR_APP_KEYS }}" >> .env && \
+            echo "API_TOKEN_SALT=${{ secrets.MAHESHR_API_TOKEN_SALT }}" >> .env && \
+            echo "ADMIN_JWT_SECRET=${{ secrets.MAHESHR_ADMIN_JWT_SECRET }}" >> .env && \
+            echo "TRANSFER_TOKEN_SALT=${{ secrets.MAHESHR_TRANSFER_TOKEN_SALT }}" >> .env && \
+            echo "DATABASE_CLIENT=${{ secrets.MAHESHR_DATABASE_CLIENT }}" >> .env && \
+            echo "DATABASE_FILENAME=${{ secrets.MAHESHR_DATABASE_FILENAME }}" >> .env && \
+            pm2 stop all || true && \
+            npm install && \
+            npm run build && \
+            pm2 restart all
+        env:
+          HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
+          APP_KEYS: ${{ secrets.APP_KEYS }}
+          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+          DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
+          DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
