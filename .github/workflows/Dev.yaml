@@ -22,8 +22,8 @@ jobs:
           port: ${{ secrets.MAHESHR_SSH_PORT }}
           script: |
             cd /srv/strapi && \
-            git checkout -f mahesh-prod && \
-            git pull origin mahesh-prod && \
+            git checkout -f mahesh-dev && \
+            git pull origin mahesh-dev && \
             echo "HOST=${{ secrets.MAHESHR_HOST }}" > .env && \
             echo "PORT=${{ secrets.MAHESHR_PORT }}" >> .env && \
             echo "APP_KEYS=${{ secrets.MAHESHR_APP_KEYS }}" >> .env && \
@@ -33,7 +33,7 @@ jobs:
             echo "DATABASE_CLIENT=${{ secrets.MAHESHR_DATABASE_CLIENT }}" >> .env && \
             echo "DATABASE_FILENAME=${{ secrets.MAHESHR_DATABASE_FILENAME }}" >> .env && \
             pm2 stop all || true && \
-            npm install && \
+            sudo npm install && \
             npm run build && \
             pm2 restart all
         env:
