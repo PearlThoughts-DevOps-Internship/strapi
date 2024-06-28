@@ -1,4 +1,4 @@
-name:  Deployment for Strapi API
+name: Deployment for Strapi API
 
 on:
   workflow_dispatch:
@@ -17,17 +17,29 @@ jobs:
           aws-access-key-id: ${{ secrets.MAHESHR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.MAHESH_AWS_SECRET_KEY_ID }}
           aws-region: us-west-2 
+
       - name: Setting up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.MAHESHR_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa   
+          chmod 600 ~/.ssh/id_rsa
 
-      - name:  Setting up the terraform
-        uses: hashicorp/terraform-github-actions/init@v0.4.0
-      - name: Initialization
+      - name: Setting up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
         run: terraform init
         working-directory: ./Terraform
-      - name: Apply the infrastructure
+
+      - name: Terraform Apply
+        env:
+          HOST: ${{ secrets.MAHESHR_HOST }}
+          PORT: ${{ secrets.MAHESHR_PORT }}
+          APP_KEYS: ${{ secrets.MAHESHR_APP_KEYS }}
+          API_TOKEN_SALT: ${{ secrets.MAHESHR_API_TOKEN_SALT }}
+          ADMIN_JWT_SECRET: ${{ secrets.MAHESHR_ADMIN_JWT_SECRET }}
+          TRANSFER_TOKEN_SALT: ${{ secrets.MAHESHR_TRANSFER_TOKEN_SALT }}
+          DATABASE_CLIENT: ${{ secrets.MAHESHR_DATABASE_CLIENT }}
+          DATABASE_FILENAME: ${{ secrets.MAHESHR_DATABASE_FILENAME }}
         run: terraform apply -var-file "dev.tfvars" -auto-approve
         working-directory: ./Terraform
