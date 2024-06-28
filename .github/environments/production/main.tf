@@ -56,7 +56,7 @@ resource "aws_instance" "ar_strapi_docker" {
   instance_type = "t2.medium"
   subnet_id     = data.aws_subnet.first.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
-  key_name = "ps_pd_a"
+  key_name = "arka_key"
 
   user_data = file("user_data.sh")
 
