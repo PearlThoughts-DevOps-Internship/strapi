@@ -27,11 +27,11 @@ jobs:
  
       - name: Terraform Apply
         run: terraform destroy -auto-approve
-       working-directory: ./terraform-files
+        working-directory: ./terraform-files
 
       - name: Store Instance IP 
         run: echo $(terraform output instance_ip) > ./instance_ip.txt
-       working-directory: ./terraform-files
+        working-directory: ./terraform-files
 
       - name: Display Instance IP
         run: cat ./terraform-files/instance_ip.txt
