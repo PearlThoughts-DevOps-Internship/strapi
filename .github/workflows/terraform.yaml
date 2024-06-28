@@ -25,16 +25,16 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: srv/strapi
+        working-directory: ./terraform-files
 
       - name: Terraform Apply
         run: terraform destroy -auto-approve
-        working-directory: srv/strapi
+       working-directory: ./terraform-files
 
       - name: Store Instance IP 
         run: echo $(terraform output instance_ip) > ./instance_ip.txt
-        working-directory: srv/strapi
+       working-directory: ./terraform-files
 
       - name: Display Instance IP
-        run: cat srv/strapi/instance_ip.txt
+        run: cat ./terraform-files/instance_ip.txt
 

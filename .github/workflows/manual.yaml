@@ -1,4 +1,4 @@
-name: Deploy Strapi
+name: Deploy Strapi Application
 
 on:
   push:
@@ -6,28 +6,41 @@ on:
       - karti-bawane
 
 jobs:
-  deploy-strapi:
-    name: 'Deploy Strapi'
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: SSH into server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          # Install prerequisites
+          sudo apt-get update
+          sudo apt-get install -y git
 
-      - name: Install Dependencies
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'sudo apt-get update -y && sudo apt-get install -y sshpass'
+          # Install Node.js 18 and npx
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          sudo npm install -g npx
 
-      - name: Clone Strapi Repository
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'git clone https://github.com/PearlThoughts-DevOps-Internship/strapi /srv/strapi'
+          # Install PM2
+          sudo npm install -g pm2
 
-      - name: Install Strapi Dependencies and Start PM2 Process
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'cd /srv/strapi && npm install && pm2 start npm --name "strapi" -- start'
+          # Clone the repository
+          git clone https://github.com/Zenisis/strap-docker.git
+          cd strap-docker
 
+          # Install dependencies
+          npm install
+
+          # Run necessary npm commands
+          npm run build
+
+          # Start the Strapi application with PM2
+          pm2 start npm --name "strapi-app" -- start

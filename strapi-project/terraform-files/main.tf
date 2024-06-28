@@ -29,12 +29,7 @@ resource "aws_instance" "web" {
               sudo apt-get install -y nodejs npm git
               sudo npm install -g pm2
               sudo npm install -g npx
-              sudo mkdir -p /srv/strapi
-              sudo chown -R ubuntu:ubuntu /srv/strapi
-              cd /srv/strapi
-              npx create-strapi-app my-project --quickstart
-              cd my-project
-              pm2 start npm --name "strapi" -- run develop
+              
               EOF
 
 
