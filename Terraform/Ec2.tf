@@ -59,10 +59,22 @@ resource "null_resource" "example" {
       "sudo chown -R ubuntu:ubuntu /srv/strapi",
       "sudo chmod -R 755 /srv/strapi",
       "cd /srv/strapi",
+      "touch .env",
+      "echo 'HOST=${MAHESHR_HOST}' >> .env",
+      "echo 'PORT=${MAHESHR_PORT}' >> .env",
+      "echo 'APP_KEYS=${MAHESHR_APP_KEYS}' >> .env",
+      "echo 'API_TOKEN_SALT=${MAHESHR_API_TOKEN_SALT}' >> .env",
+      "echo 'ADMIN_JWT_SECRET=${MAHESHR_ADMIN_JWT_SECRET}' >> .env",
+      "echo 'TRANSFER_TOKEN_SALT=${MAHESHR_TRANSFER_TOKEN_SALT}' >> .env",
+      "echo 'DATABASE_CLIENT=${MAHESHR_DATABASE_CLIENT}' >> .env",
+      "echo 'DATABASE_FILENAME=${MAHESHR_DATABASE_FILENAME}' >> .env",
+      "echo 'DATABASE_FILENAME=${MAHESHR_JWT_SECRET}' >> .env",
       "git checkout -f mahesh-prod",
+      "git pull origin mahesh-prod",
       "sudo npm install",
-      "pm2 start npm --name strapi -- run develop",
-      "pm2 save"
+      "npm run build",
+      "pm2 start npm --name 'strapi' -- start",
+      "pm2 restart all"
     ]
 }
  depends_on = [
