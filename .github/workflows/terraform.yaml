@@ -1,9 +1,7 @@
 name: Terraform Deployment
 
 on:
-  push:
-    branches:
-      - karti-bawane
+  workflow_dispatch:
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.KARTIK_BAWANE_ACCESS_KEY }}
