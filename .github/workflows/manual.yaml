@@ -1,47 +1,47 @@
-name: Deploy Strapi Application
+# name: Deploy Strapi Application
 
-on:
-  push:
-    branches:
-      - karti-bawane
+# on:
+#   push:
+#     branches:
+#       - karti-bawane
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
 
-    - name: SSH into server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
+#     - name: SSH into server
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.SERVER_HOST }}
+#         username: ${{ secrets.SERVER_USER }}
+#         key: ${{ secrets.SERVER_SSH_KEY }}
+#         script: |
           # Install prerequisites
           sudo apt-get update
           sudo apt-get install -y git
 
           # Install Node.js 18 and npx
-          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-          sudo apt-get install -y nodejs
-          sudo npm install -g npx
+          # curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          # sudo apt-get install -y nodejs
+          # sudo npm install -g npx
 
-          # Install PM2
-          sudo npm install -g pm2
+          # # Install PM2
+          # sudo npm install -g pm2
 
-          # Clone the repository
-          git clone https://github.com/PearlThoughts-DevOps-Internship/strapi.git
-          cd strapi
-          git checkout karti-bawane
+          # # Clone the repository
+          # git clone https://github.com/PearlThoughts-DevOps-Internship/strapi.git
+          # cd strapi
+          # git checkout karti-bawane
 
-          # Install dependencies
-          npm install
+          # # Install dependencies
+          # npm install
 
-          # Run necessary npm commands
-          npm run build
+          # # Run necessary npm commands
+          # npm run build
 
-          # Start the Strapi application with PM2
-          pm2 start npm --name "strapi-app" -- start
+          # # Start the Strapi application with PM2
+          # pm2 start npm --name "strapi-app" -- start
