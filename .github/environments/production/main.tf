@@ -53,7 +53,7 @@ resource "aws_security_group" "strapi_sg" {
 
 resource "aws_instance" "ar_strapi_docker" {
   ami           = "ami-0f58b397bc5c1f2e8"
-  instance_type = "t2.medium"
+  instance_type = "t2.small"
   subnet_id     = data.aws_subnet.first.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
   key_name = "arka_key"
