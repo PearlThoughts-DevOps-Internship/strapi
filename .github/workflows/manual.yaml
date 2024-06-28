@@ -33,8 +33,9 @@ jobs:
           sudo npm install -g pm2
 
           # Clone the repository
-          git clone https://github.com/Zenisis/strap-docker.git
-          cd strap-docker
+          git clone https://github.com/PearlThoughts-DevOps-Internship/strapi.git
+          cd strapi
+          git checkout karti-bawane
 
           # Install dependencies
           npm install
