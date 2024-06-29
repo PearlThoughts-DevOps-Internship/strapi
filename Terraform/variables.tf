@@ -9,6 +9,10 @@ variable "MAHESHR_HOST" {
   type = string
   sensitive = true
 }
+variable "number" {
+  type = string
+  default = "1.0"
+}
 variable "MAHESHR_PORT" {
   type = number
   sensitive = true
