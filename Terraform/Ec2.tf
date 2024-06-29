@@ -106,6 +106,7 @@ resource "null_resource" "example" {
       "echo 'TRANSFER_TOKEN_SALT=${MAHESHR_TRANSFER_TOKEN_SALT}' >> .env",
       "echo 'DATABASE_CLIENT=${MAHESHR_DATABASE_CLIENT}' >> .env",
       "echo 'DATABASE_FILENAME=${MAHESHR_DATABASE_FILENAME}' >> .env",
+      "echo 'JWT_SECRET=${MAHESHR_JWT_SECRET}' >> .env",
       "sudo npm install",
       "npm run build",
       "pm2 start npm --name 'strapi' -- start",
