@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     steps:
-      - name: Checkout the code
+      - name: Checkout the code 
         uses: actions/checkout@v4
         
       - name: Setting up AWS credentials
@@ -18,7 +18,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.MAHESH_AWS_SECRET_KEY_ID }}
           aws-region: us-west-2 
 
-      - name: Setting up Terraform
+      - name: Setting up the Terraform
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
