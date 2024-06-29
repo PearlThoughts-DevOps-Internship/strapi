@@ -37,5 +37,6 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.MAHESHR_TRANSFER_TOKEN_SALT }}
           DATABASE_CLIENT: ${{ secrets.MAHESHR_DATABASE_CLIENT }}
           DATABASE_FILENAME: ${{ secrets.MAHESHR_DATABASE_FILENAME }}
-        run: terraform apply -var-file "dev.tfvars" -auto-approve
+          JWT_SECRET: ${{ secrets.MAHESHR_JWT_SECRET }}
+        run: terraform apply -var MAHESHR_HOST=${{ secrets.MAHESHR_HOST }} -var MAHESHR_PORT=${{ secrets.MAHESHR_PORT }} -var MAHESHR_APP_KEYS=${{ secrets.MAHESHR_APP_KEYS }} -var MAHESHR_API_TOKEN_SALT=${{ secrets.MAHESHR_API_TOKEN_SALT }} -var MAHESHR_ADMIN_JWT_SECRET=${{ secrets.MAHESHR_ADMIN_JWT_SECRET }} -var MAHESHR_TRANSFER_TOKEN_SALT=${{ secrets.MAHESHR_TRANSFER_TOKEN_SALT }} -var MAHESHR_DATABASE_CLIENT=${{ secrets.MAHESHR_DATABASE_CLIENT }} -var MAHESHR_DATABASE_FILENAME=${{ secrets.MAHESHR_DATABASE_FILENAME }} -var MAHESHR_JWT_SECRET=${{ secrets.MAHESHR_JWT_SECRET }} -var-file "dev.tfvars" -auto-approve
         working-directory: ./Terraform
