@@ -5,4 +5,6 @@ variable "region" {
 variable "instance_type" {
   type = string
 }
-
+variable "number" {
+  type = string
+}
