@@ -18,12 +18,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.MAHESH_AWS_SECRET_KEY_ID }}
           aws-region: us-west-2 
 
-      - name: Setting up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.MAHESHR_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
       - name: Setting up Terraform
         uses: hashicorp/setup-terraform@v1
 

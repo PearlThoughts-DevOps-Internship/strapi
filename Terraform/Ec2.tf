@@ -24,7 +24,18 @@ resource "aws_security_group" "sgforstrapi" {
   tags = {
     Name = "Sg-strapi"
   }
+  depends_on = [ aws_route_table_association.association ]
 
+}
+resource "tls_private_key" "forstrapiapp" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+  depends_on = [ aws_security_group.sgforstrapi ]
+}
+resource "aws_key_pair" "keypairforstrapi" {
+  key_name   = "keyforstrapi"
+  public_key = tls_private_key.forstrapiapp.public_key_openssh
+  depends_on = [ tls_private_key.forstrapiapp ]
 }
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -43,27 +54,35 @@ data "aws_ami" "ubuntu" {
   depends_on = [ aws_security_group.sgforstrapi ]
 }
 
-
 resource "aws_instance" "ec2forstrapi" {
-  ami                         = "data.aws_ami.ubuntu.id"
+  ami                         = data.aws_ami.ubuntu.id
   availability_zone = "us-west-2a"
   instance_type               = var.instance_type
   vpc_security_group_ids      = [aws_security_group.sgforstrapi.id]
   subnet_id                   = aws_subnet.publicsubnet.id
-  key_name                    = var.key_name
+  key_name                    = aws_key_pair.keypairforstrapi.key_name
   associate_public_ip_address = true
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_size = 20
+    volume_type = "gp2"
+    delete_on_termination = true
+  }
   tags = {
     Name = "ec2forstrapi"
   }
 }
 
 resource "null_resource" "example" {
+   triggers = {
+    running_number  =  var.number
+  }
 
     provisioner "remote-exec" {
       connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = file("~/.ssh/id_rsa") 
+      private_key = tls_private_key.forstrapiapp.private_key_pem
       host        = aws_instance.ec2forstrapi.public_ip
     }
     inline = [
@@ -77,6 +96,8 @@ resource "null_resource" "example" {
       "sudo chmod -R 755 /srv/strapi",
       "cd /srv/strapi",
       "touch .env",
+      "git checkout -f mahesh-prod",
+      "git pull origin mahesh-prod",
       "echo 'HOST=${MAHESHR_HOST}' >> .env",
       "echo 'PORT=${MAHESHR_PORT}' >> .env",
       "echo 'APP_KEYS=${MAHESHR_APP_KEYS}' >> .env",
@@ -86,8 +107,6 @@ resource "null_resource" "example" {
       "echo 'DATABASE_CLIENT=${MAHESHR_DATABASE_CLIENT}' >> .env",
       "echo 'DATABASE_FILENAME=${MAHESHR_DATABASE_FILENAME}' >> .env",
       "echo 'DATABASE_FILENAME=${MAHESHR_JWT_SECRET}' >> .env",
-      "git checkout -f mahesh-prod",
-      "git pull origin mahesh-prod",
       "sudo npm install",
       "npm run build",
       "pm2 start npm --name 'strapi' -- start",
@@ -98,4 +117,3 @@ resource "null_resource" "example" {
     aws_instance.ec2forstrapi
   ]
   }
-
