@@ -1,18 +1,24 @@
 variable "aws_region" {
   description = "The Name of the regin"
-  type = string
-  default = "ap-south-1"
+  type        = string
 }
 
 variable "instance_type" {
   description = "The type of instance"
-  type = string
-  default = "t2.small"
+  type        = string
 }
 
+variable "route53_zone_id" {
+  description = "The ID of the Route 53 hosted zone"
+  type        = string
+}
+
+variable "subdomain" {
+  description = "The subdomain to create"
+  type        = string
+}
 
 variable "s3" {
   description = "S3 Bucket Name"
-  type = string
-  default = "851725297111"
+  type        = string
 }
