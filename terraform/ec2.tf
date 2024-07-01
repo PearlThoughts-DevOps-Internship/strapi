@@ -4,8 +4,14 @@ variable "private_key_path" {
   type        = string
 }
 
-# Security Group
+# Check if the security group exists
+data "aws_security_group" "existing_strapi_sg" {
+  name = "ashwani-security-group"
+}
+
+# If the security group exists, use its ID; otherwise, create a new one
 resource "aws_security_group" "strapi_sg" {
+  count       = length(data.aws_security_group.existing_strapi_sg.ids) > 0 ? 0 : 1
   name        = "ashwani-security-group"
   description = "Security group for Strapi EC2 instance"
 
