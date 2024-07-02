@@ -9,6 +9,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: strapi_env
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -21,16 +22,17 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.vTaikar_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.vTaikar_AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.VTAIKAR_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.VTAIKAR_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
       - name: Set up SSH key
         run: |
-          echo "${{ secrets.vTaikar_SSH_PRIVATE_KEY }}" > private_key.pem
+          echo "${{ secrets.VTAIKAR_SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+
       - name: Terraform Init
-        working-directory: /terraform/
+        working-directory: terraform
         run: terraform init
         env:
           TF_LOG: DEBUG
@@ -38,10 +40,10 @@ jobs:
 
       - name: Terraform Init - Debug Logs
         if: failure()
-        run: cat /terraform/terraform.log
+        run: cat terraform/terraform.log
 
       - name: Terraform Plan
-        working-directory: /terraform/
+        working-directory: terraform
         run: terraform plan -out=tfplan
         env:
           TF_LOG: DEBUG
@@ -49,10 +51,10 @@ jobs:
 
       - name: Terraform Plan - Debug Logs
         if: failure()
-        run: cat /terraform/terraform.log
+        run: cat terraform/terraform.log
 
       - name: Terraform Apply
-        working-directory: .github/strapi_env/prod_env
+        working-directory: terraform
         run: terraform apply -auto-approve tfplan
         env:
           TF_LOG: DEBUG
