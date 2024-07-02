@@ -1,4 +1,3 @@
-
 name: Deploy to Production (terraform)
 
 on:
@@ -10,6 +9,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: strapi_env
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -30,30 +30,21 @@ jobs:
         run: |
           echo "${{ secrets.VTAIKAR_SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+
       - name: Terraform Init
-        working-directory: /terraform
+        working-directory: terraform
         run: terraform init
         env:
           TF_LOG: DEBUG
-        continue-on-error: true
-
-      - name: Terraform Init - Debug Logs
-        if: failure()
-        run: cat /terraform/terraform.log
 
       - name: Terraform Plan
-        working-directory: /terraform
+        working-directory: terraform
         run: terraform plan -out=tfplan
         env:
           TF_LOG: DEBUG
-        continue-on-error: true
-
-      - name: Terraform Plan - Debug Logs
-        if: failure()
-        run: cat .github/strapi_env/prod_env/terraform.log
 
       - name: Terraform Apply
-        working-directory: .github/strapi_env/prod_env
+        working-directory: terraform
         run: terraform apply -auto-approve tfplan
         env:
           TF_LOG: DEBUG
