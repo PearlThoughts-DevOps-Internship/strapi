@@ -17,8 +17,22 @@ resource "aws_security_group" "strapi_sg" {
   }
 
   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 1337
     to_port     = 1337
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -72,7 +86,7 @@ resource "aws_instance" "strapi" {
     "mkdir -p /home/ubuntu/.npm && sudo chown -R ubuntu:ubuntu /home/ubuntu/.npm",
     "nvm install 18",
     "sudo npm install -g pm2",
-    "git clone https://github.com/veera1016/strapi.git"
+    "git clone https://github.com/TheMannu/strapi.git"
   ]
     connection {
       type        = "ssh"
