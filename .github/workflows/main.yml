@@ -30,7 +30,7 @@ jobs:
           echo "${{ secrets.vTaikar_SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
       - name: Terraform Init
-        working-directory: /terraform
+        working-directory: /terraform/
         run: terraform init
         env:
           TF_LOG: DEBUG
@@ -41,7 +41,7 @@ jobs:
         run: cat /terraform/terraform.log
 
       - name: Terraform Plan
-        working-directory: /terraform
+        working-directory: /terraform/
         run: terraform plan -out=tfplan
         env:
           TF_LOG: DEBUG
