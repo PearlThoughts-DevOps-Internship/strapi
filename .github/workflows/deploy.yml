@@ -38,9 +38,9 @@ jobs:
           username: ${{ secrets.ASHWANI_EC2_USER }}
           key: ${{ secrets.ASHWANI_EC2_KEY }}
           script: |
-            set -e
-            exec > >(tee -i /tmp/deploy.log)
-            exec 2>&1
+            # set -e
+            # exec > >(tee -i /tmp/deploy.log)
+            # exec 2>&1
 
             echo "Navigating to project directory"
             cd /home/ubuntu/strapi/strapi-project
