@@ -19,27 +19,15 @@ jobs:
     - name: Install SSH client
       run: sudo apt-get install openssh-client
 
-    - name: Install Terraform
-      run: |
-        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
-        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-        sudo apt-get update && sudo apt-get install terraform
-
-    - name: Format and check Terraform files
-      run: |
-        terraform fmt -recursive
-        terraform fmt -check -recursive
-
     - name: SSH into EC2 instance and deploy Strapi
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_PUBLIC_IP }}
+        host: ${{ secrets.EC2_PUBLIC_IP }}  # Ensure this is set in your GitHub Secrets
         username: ubuntu
-        key: ${{ secrets.PRIVATE_SSH_KEY }}
+        key: ${{ secrets.PRIVATE_SSH_KEY }}  # Ensure this is set in your GitHub Secrets
         script: |
           cd /srv/strapi
-          sudo git pull origin main
+          sudo git pull origin Parameswaran
           sudo npm install
           # Check if Strapi is already managed by pm2
           if ! sudo pm2 status | grep -q "strapi-app"; then
@@ -48,3 +36,4 @@ jobs:
           else
             echo "Strapi is already managed by pm2. Restarting Strapi..."
             sudo pm2 restart strapi-app
+          fi
