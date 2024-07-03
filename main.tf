@@ -17,7 +17,7 @@ resource "tls_private_key" "strapi_ec2" {
 }
 
 resource "aws_key_pair" "strapi_keys" {
-  key_name   = "strapi-keypair"
+  key_name   = "strapi_ec2_keys"
   public_key = tls_private_key.strapi_ec2.public_key_openssh
 }
 
