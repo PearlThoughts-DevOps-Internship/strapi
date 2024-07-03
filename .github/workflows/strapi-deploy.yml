@@ -3,10 +3,10 @@ name: Deploy Strapi Application
 on:
   push:
     branches:
-      - Parameswaran 
+      - Parameswaran
   pull_request:
     branches:
-      - Parameswaran  
+      - Parameswaran
 
 jobs:
   deploy:
@@ -19,6 +19,18 @@ jobs:
     - name: Install SSH client
       run: sudo apt-get install openssh-client
 
+    - name: Install Terraform
+      run: |
+        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        sudo apt-get update && sudo apt-get install terraform
+
+    - name: Format and check Terraform files
+      run: |
+        terraform fmt -recursive
+        terraform fmt -check -recursive
+
     - name: SSH into EC2 instance and deploy Strapi
       uses: appleboy/ssh-action@master
       with:
@@ -28,7 +40,7 @@ jobs:
         script: |
           cd /srv/strapi
           sudo git pull origin main
-          sudo npm install         
+          sudo npm install
           # Check if Strapi is already managed by pm2
           if ! sudo pm2 status | grep -q "strapi-app"; then
             echo "Strapi is not managed by pm2. Starting Strapi with pm2..."
@@ -36,4 +48,3 @@ jobs:
           else
             echo "Strapi is already managed by pm2. Restarting Strapi..."
             sudo pm2 restart strapi-app
-          fi

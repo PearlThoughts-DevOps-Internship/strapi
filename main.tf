@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "5.54.1"
     }
   }
@@ -22,9 +22,9 @@ resource "aws_key_pair" "strapi_keys" {
 }
 
 resource "aws_instance" "strapi_instance" {
-  ami           = var.ami
-  instance_type = "t2.micro"
-  key_name      = aws_key_pair.strapi_keys.key_name
+  ami             = var.ami
+  instance_type   = "t2.micro"
+  key_name        = aws_key_pair.strapi_keys.key_name
   security_groups = [aws_security_group.strapi_ec2_sg.name]
 
   tags = {
@@ -32,17 +32,17 @@ resource "aws_instance" "strapi_instance" {
   }
 
   provisioner "remote-exec" {
-  inline = [
-    "sudo apt-get update",
-    "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
-    "sudo apt-get install -y nodejs",
-    "sudo apt-get install -y npm",
-    "sudo npm install pm2 -g",
-    "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/Parameswaran17/strapi-.git /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
-    "sudo chmod u+x /srv/strapi/generate_env_variables.sh*",
-    "cd /srv/strapi",
-    "sudo ./generate_env_variables.sh",
-]
+    inline = [
+      "sudo apt-get update",
+      "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
+      "sudo apt-get install -y nodejs",
+      "sudo apt-get install -y npm",
+      "sudo npm install pm2 -g",
+      "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/Parameswaran17/strapi-.git /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
+      "sudo chmod u+x /srv/strapi/generate_env_variables.sh*",
+      "cd /srv/strapi",
+      "sudo ./generate_env_variables.sh",
+    ]
     connection {
       type        = "ssh"
       user        = "ubuntu"
