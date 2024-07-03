@@ -1,8 +1,8 @@
 data "aws_vpc" "default" {
   default = true
-}
+ }
 
-data "aws_subnets" "default" {
+data "aws_subnets" "default" {   # using default vpc 
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
@@ -11,7 +11,7 @@ data "aws_subnets" "default" {
   # Optional: Specify an exact availability zone
   # filter {
   #   name   = "availability-zone"
-  #   values = ["eu-north-1a"]  # Adjust as necessary
+  #   values = ["us-east-1"]  # Adjust as necessary
   # }
 }
 
@@ -49,13 +49,12 @@ resource "aws_security_group" "strapi_sg" {
 }
 
 resource "aws_instance" "vyank_strapi_docker" {
-  ami                    = "ami-0705384c0b33c194c"
-  instance_type          = "t3.medium"
+  ami                    = "ami-04a81a99f5ec58529"
+  instance_type          = "t3.small"
   subnet_id              = data.aws_subnet.first.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
-  key_name               = "vyank_private"
+  key_name               = "push1"
 
-  user_data = file("user_data.sh")
 
   tags = {
     Name = "vyank-strapi-docker"
