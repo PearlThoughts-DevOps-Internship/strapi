@@ -233,3 +233,8 @@ dist
 build
 .strapi-updater.json
 .strapi-cloud.json
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+terraform.tfstate
+terraform.tfstate.backup

@@ -3,10 +3,10 @@ name: Deploy Strapi Application
 on:
   push:
     branches:
-      - Parameswaran 
+      - Parameswaran
   pull_request:
     branches:
-      - Parameswaran  
+      - Parameswaran
 
 jobs:
   deploy:
@@ -22,13 +22,13 @@ jobs:
     - name: SSH into EC2 instance and deploy Strapi
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_PUBLIC_IP }}
+        host: ${{ secrets.EC2_PUBLIC_IP }}  # Ensure this is set in your GitHub Secrets
         username: ubuntu
-        key: ${{ secrets.PRIVATE_SSH_KEY }}
+        key: ${{ secrets.PRIVATE_SSH_KEY }}  # Ensure this is set in your GitHub Secrets
         script: |
           cd /srv/strapi
-          sudo git pull origin main
-          sudo npm install         
+          sudo git pull origin Parameswaran
+          sudo npm install
           # Check if Strapi is already managed by pm2
           if ! sudo pm2 status | grep -q "strapi-app"; then
             echo "Strapi is not managed by pm2. Starting Strapi with pm2..."

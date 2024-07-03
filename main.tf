@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "5.54.1"
     }
   }
@@ -16,40 +16,34 @@ resource "tls_private_key" "strapi_ec2" {
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "strapi_keys" {
-  key_name   = "strapi-keypair"
-  public_key = tls_private_key.strapi_ec2.public_key_openssh
-}
-
 resource "aws_instance" "strapi_instance" {
-  ami           = var.ami
-  instance_type = "t2.micro"
-  key_name      = aws_key_pair.strapi_keys.key_name
+  ami             = var.ami
+  instance_type   = "t2.micro"
+  key_name        = "strapi_ec2_keys"
   security_groups = [aws_security_group.strapi_ec2_sg.name]
 
   tags = {
     Name = "Paramesh-Strapi-Instance"
   }
 
-  provisioner "remote-exec" {
-  inline = [
-    "sudo apt-get update",
-    "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
-    "sudo apt-get install -y nodejs",
-    "sudo apt-get install -y npm",
-    "sudo npm install pm2 -g",
-    "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/Parameswaran17/strapi-.git /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
-    "sudo chmod u+x /srv/strapi/generate_env_variables.sh*",
-    "cd /srv/strapi",
-    "sudo ./generate_env_variables.sh",
-]
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = tls_private_key.strapi_ec2.private_key_pem
-      host        = self.public_ip
-    }
-  }
+  user_data = <<EOF
+#!/bin/bash
+
+sudo apt-get update
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs npm
+
+sudo npm install pm2 -g
+
+if [ ! -d /srv/strapi ]; then
+  sudo git clone https://github.com/Parameswaran17/strapi.git /srv/strapi
+fi
+
+sudo chmod +x /srv/strapi/generate_env_variables.sh  # Specify exact file
+
+cd /srv/strapi
+sudo ./generate_env_variables.sh
+EOF
 
 }
 
