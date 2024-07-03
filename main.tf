@@ -23,7 +23,7 @@ resource "aws_key_pair" "strapi_keys" {
 
 resource "aws_instance" "strapi_instance" {
   ami           = var.ami
-  instance_type = "t2.medium"
+  instance_type = "t2.micro"
   key_name      = aws_key_pair.strapi_keys.key_name
   security_groups = [aws_security_group.strapi_ec2_sg.name]
 
@@ -38,7 +38,7 @@ resource "aws_instance" "strapi_instance" {
     "sudo apt-get install -y nodejs",
     "sudo apt-get install -y npm",
     "sudo npm install pm2 -g",
-    "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/raviiai/Strapi-project-Deployment /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
+    "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/Parameswaran17/strapi-.git /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
     "sudo chmod u+x /srv/strapi/generate_env_variables.sh*",
     "cd /srv/strapi",
     "sudo ./generate_env_variables.sh",
