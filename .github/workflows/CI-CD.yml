@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.VTAIKAR_SERVER_USER }}
           key: ${{ secrets.VTAIKAR_SSH_PRIVATE_KEY }}
           script: |
-            cd /srv/strapi
+            cd /srv/strapi/strapi_app
             npm install
             npm run build
             pm2 stop strapi || true
