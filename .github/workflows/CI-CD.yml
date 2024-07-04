@@ -22,6 +22,15 @@ jobs:
         with:
           node-version: '20'  # Adjust Node.js version as needed
 
+      - name: Ensure /srv/strapi exists on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VTAIKAR_SERVER_HOST }}
+          username: ${{ secrets.VTAIKAR_SERVER_USER }}
+          key: ${{ secrets.VTAIKAR_SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p /srv/strapi
+
       - name: Transfer files to server
         uses: appleboy/scp-action@master
         with:
