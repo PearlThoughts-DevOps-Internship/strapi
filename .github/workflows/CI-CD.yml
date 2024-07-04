@@ -1,4 +1,3 @@
-
 name: CI/CD for Strapi
 
 on:
@@ -13,6 +12,7 @@ jobs:
   ci_cd:
     name: CI/CD
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,16 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Node.js version as needed
-
-      - name: Create Strapi directory on EC2 instance
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VTAIKAR_SERVER_HOST }}
-          username: ${{ secrets.VTAIKAR_SERVER_USER }}
-          key: ${{ secrets.VTAIKAR_SSH_PRIVATE_KEY }}
-          script: |
-            mkdir -p /srv/strapi
+          node-version: '20'  # Adjust Node.js version as needed
 
       - name: Transfer files to server
         uses: appleboy/scp-action@master
@@ -40,7 +31,7 @@ jobs:
           source: "strapi_app/*"
           target: "/srv/strapi/"
 
-      - name: Deploy application on EC2 instance
+      - name: SSH into server and deploy Strapi
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VTAIKAR_SERVER_HOST }}
