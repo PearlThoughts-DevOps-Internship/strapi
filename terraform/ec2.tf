@@ -5,8 +5,8 @@ variable "private_key_path" {
 }
 
 # Security Group
-resource "aws_security_group" "strapi_sg" {
-  name        = "Ug-strapi-security-group"
+resource "aws_security_group" "strapi_ug" {
+  name        = "Api-strapi-security-group"
   description = "Security group for Strapi EC2 instance"
 
   ingress {
@@ -67,7 +67,7 @@ resource "aws_instance" "strapi" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   key_name               = var.key_pair
-  vpc_security_group_ids = [aws_security_group.strapi_sg.id]
+  vpc_security_group_ids = [aws_security_group.strapi_ug.id]
 
   tags = {
     Name = "GowthamStrapiServer"
