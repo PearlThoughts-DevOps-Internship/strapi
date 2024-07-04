@@ -1,5 +1,5 @@
 variable "aws_region" {
-  default = "ap-south-1"
+  default = "us-east-1"
 }
 
 variable "instance_type" {
@@ -7,5 +7,5 @@ variable "instance_type" {
 }
 
 variable "key_pair" {
-  default = "Ashwanikey"
+  default = "strapi-key"
 }

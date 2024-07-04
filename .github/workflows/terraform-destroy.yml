@@ -25,16 +25,16 @@ jobs:
       - name: Create SSH Key File
         run: |
           mkdir -p /home/runner/.ssh
-          echo "${{ secrets.ASHWANI_EC2_KEY }}" > /home/runner/.ssh/Ashwanikey.pem
-          chmod 600 /home/runner/.ssh/Ashwanikey.pem
+          echo "${{ secrets.STRAPI_EC2_KEY }}" > /home/runner/.ssh/strapi-key.pem
+          chmod 600 /home/runner/.ssh/strapi-key.pem
           ls -al /home/runner/.ssh  # Verify permissions and existence
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.ASHWANI_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.ASHWANI_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          aws-access-key-id: ${{ secrets.GOWTHAM_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.GOWTHAM_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Initialize Terraform
         run: terraform init

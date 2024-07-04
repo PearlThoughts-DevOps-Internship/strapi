@@ -12,5 +12,5 @@ output "public_dns" {
 }
 
 output "ssh_command_dns" {
-  value = "ssh -i Ashwanikey.pem ubuntu@${aws_instance.strapi.public_dns}"
+  value = "ssh -i strapi-key.pem ubuntu@${aws_instance.strapi.public_dns}"
 }
