@@ -21,16 +21,6 @@ jobs:
         with:
           node-version: '20'  # Adjust the Node.js version
 
-      - name: Install dependencies
-        run: |
-          cd strapi_app
-          npm install
-
-      - name: Build Strapi application
-        run: |
-          cd strapi_app
-          npm run build
-
       - name: Change file permissions
         run: |
           sudo chmod -R 755 strapi_app
