@@ -38,4 +38,4 @@ jobs:
 
       - name: Apply Terraform
         run: terraform apply -auto-approve -var="private_key_path=/home/runner/.ssh/Ashwanikey.pem"
-        working-directory: ./terraform  # Update this path if necessary
+        working-directory: ./terraform  # Update this path if necess
