@@ -3,10 +3,10 @@ name: CI/CD for Strapi
 on:
   push:
     branches:
-      - master
+      - vyankateshwarT
   pull_request:
     branches:
-      - master
+      - vyankateshwarT
 
 jobs:
   ci_cd:
