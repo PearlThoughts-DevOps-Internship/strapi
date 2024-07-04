@@ -3,10 +3,10 @@ name: CI/CD for Strapi
 on:
   push:
     branches:
-      - master
+      - vyankateshwarT
   pull_request:
     branches:
-      - master
+      - vyankateshwarT
 
 jobs:
   ci_cd:
@@ -30,6 +30,10 @@ jobs:
         run: |
           cd strapi_app
           npm run build
+
+      - name: Change file permissions
+        run: |
+          sudo chmod -R 755 strapi_app
 
       - name: Transfer files to server
         uses: appleboy/scp-action@master

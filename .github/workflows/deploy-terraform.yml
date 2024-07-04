@@ -1,9 +1,7 @@
 name: Deploy to Production (terraform)
 
 on:
-  push:
-    branches:
-      - vyankateshwarT
+  workflow_dispatch:
 
 jobs:
   terraform:
