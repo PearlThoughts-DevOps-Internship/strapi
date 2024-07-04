@@ -50,10 +50,10 @@ resource "aws_security_group" "strapi_sg" {
 
 resource "aws_instance" "vyank_strapi_docker" {
   ami                    = "ami-04a81a99f5ec58529"
-  instance_type          = "t3.small"
+  instance_type          = "t2.medium"
   subnet_id              = data.aws_subnet.first.id
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
-  key_name               = "push1"
+  key_name               = "task3"
 
 
   tags = {
