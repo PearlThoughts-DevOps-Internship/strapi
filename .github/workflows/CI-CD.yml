@@ -54,6 +54,6 @@ jobs:
           script: |
             cd /srv/strapi/strapi_app
             npm install
-            npm run build
+            npm run start
             pm2 stop strapi || true
-            pm2 start npm --name strapi -- start
+            pm2 start npm --name strapi -- run start
