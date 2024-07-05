@@ -1,57 +1,28 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.54.1"
-    }
-  }
-}
-
 provider "aws" {
-  region = var.region
+  region = "us-west-2"  # Replace with your desired region
 }
 
-resource "tls_private_key" "strapi_ec2" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]  # Canonical
 
-resource "aws_instance" "strapi_instance" {
-  ami             = var.ami
-  instance_type   = "t2.micro"
-  key_name        = "strapi_ec2_keys"
-  security_groups = [aws_security_group.strapi_ec2_sg.name]
-
-  tags = {
-    Name = "Paramesh-Strapi-Instance"
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
-
-  user_data = <<EOF
-#!/bin/bash
-
-sudo apt-get update
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs npm
-
-sudo npm install pm2 -g
-
-if [ ! -d /srv/strapi ]; then
-  sudo git clone https://github.com/Parameswaran17/strapi.git /srv/strapi
-fi
-
-sudo chmod +x /srv/strapi/generate_env_variables.sh  # Specify exact file
-
-cd /srv/strapi
-sudo ./generate_env_variables.sh
-EOF
-
 }
 
-resource "aws_security_group" "strapi_ec2_sg" {
-  name        = "strapi-security-group2"
-  description = "Security group for Strapi EC2 instance"
+resource "aws_key_pair" "viraj_key" {
+  key_name   = "Virajkey"
+  public_key = file("C:\\Users\\HP\\Downloads\\Virajkey.pem.pub")
+}
+
+resource "aws_security_group" "sg_for_task3" {
+  name        = "SG_FOR_Task3"
+  description = "Security group for Task 3"
 
   ingress {
+    description = "SSH access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -59,6 +30,23 @@ resource "aws_security_group" "strapi_ec2_sg" {
   }
 
   ingress {
+    description = "HTTP access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTPS access"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Strapi access"
     from_port   = 1337
     to_port     = 1337
     protocol    = "tcp"
@@ -71,8 +59,47 @@ resource "aws_security_group" "strapi_ec2_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+# New instance named "Vineet's server"
+resource "aws_instance" "vineet_server" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.small"  # Adjust instance type as needed
+  key_name      = aws_key_pair.viraj_key.key_name
+  security_groups = [aws_security_group.sg_for_task3.name]
 
   tags = {
-    Name = "Strapi Security Group"
+    Name = "VineetServer"
+  }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt-get update
+              # Remove the conflicting packages
+              sudo apt-get remove -y libnode-dev libnode72
+              # Install Node.js and npm
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+              sudo npm install -g pm2
+              # Create the /srv/strapi directory
+              sudo mkdir -p /srv/strapi
+              sudo chown -R ubuntu:ubuntu /srv/strapi
+              # Clone the repository
+              git clone https://github.com/Pramod858/simple-strapi /srv/strapi
+              cd /srv/strapi
+              chmod +x generate_env_var.sh
+              ./generate_env_var.sh
+              npm install
+              npm run build
+              # Start the Strapi application using pm2
+              pm2 start npm --name "strapi" -- start
+              EOF
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("C:\\Users\\HP\\Downloads\\Virajkey.pem")
+    host        = self.public_ip
   }
 }
+

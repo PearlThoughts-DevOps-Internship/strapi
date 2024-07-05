@@ -1,7 +1,11 @@
-variable "region" {
-  default = "eu-west-2"
+variable "private_key_path" {
+  description = "Path to your SSH private key"
+  type        = string
+  default     = "C:\\Users\\HP\\Downloads\\Virajkey.pem"
 }
 
-variable "ami" {
-  default = "ami-09627c82937ccdd6d"
+variable "aws_region" {
+  description = "AWS region where resources will be deployed"
+  type        = string
+  default     = "us-east-1"
 }
