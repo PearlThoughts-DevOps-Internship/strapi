@@ -2,7 +2,7 @@ resource "aws_instance" "ec2-node-server2" {
   ami                    = "ami-05e00961530ae1b55" 
   instance_type          = "t3a.small"
   vpc_security_group_ids = [aws_security_group.HelloSG.id]
-  subnet_id              = aws_subnet.subnet1.id
+  subnet_id              = "subnet-0d45f137e4b451d4d"
   key_name               = "nandhu159"
 
 
