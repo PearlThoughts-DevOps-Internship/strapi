@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "ecs-fragate-tf-file"
+    bucket  = "ims-conf-bucket"
     region  = "ap-south-1"
     key     = "anand/node-hello-app/terraform.tfstate"
     encrypt = true
