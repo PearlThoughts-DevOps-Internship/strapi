@@ -5,7 +5,7 @@ resource "aws_instance" "vyankateshTec2" {
 
   subnet_id                   = aws_subnet.subnet1.id
 
-  key_name                    = "Vyankatesh-key"
+  key_name                    = "my-key"
   associate_public_ip_address = true
   user_data = file("user_data_strapi.sh")         
   
