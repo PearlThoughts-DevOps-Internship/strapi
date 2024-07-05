@@ -37,6 +37,6 @@ jobs:
 
       - name: Deploy Strapi Application
         run: |
-          cd /srv/strapi/
+          cd /srv/strapi2_product/
           pm2 delete strapi || true  # Stop existing Strapi process if running
           pm2 start npm --name strapi -- run start

@@ -9,7 +9,7 @@ sudo apt install nodejs -y && sudo apt install -y npm
 # update package list and install pm2(nodejs Process Manager 2)
 sudo apt update -y && sudo npm install -g pm2
 
-# go to directory to dowload code
+# go to directory to download code
 cd /srv/
 
 # clone strapi app 
