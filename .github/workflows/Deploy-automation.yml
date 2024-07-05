@@ -3,14 +3,12 @@ name: Terraform Automated
 on:
   push:
     branches:
-      - vyankateshwarT  # Triggered on push to vyankateshwarT branch
+      - main  # Triggered on push to main branch
 
 jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
-    environment:
-      AWS_REGION: "us-west-2"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,21 +19,21 @@ jobs:
           terraform_version: "1.1.7"
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.VTAIKAR_AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{ secrets.VTAIKAR_AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-west-2"  # Ensure this matches your AWS region
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.VTAIKAR_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.VTAIKAR_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         run: terraform init
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve || true  # Destroy existing infrastructure
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
       - name: Deploy Strapi Application
         run: |
-          # Commands to deploy Strapi on port 1337
           cd /srv/strapi/
           pm2 delete strapi || true  # Stop existing Strapi process if running
           pm2 start npm --name strapi -- run start

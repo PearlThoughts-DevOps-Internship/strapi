@@ -7,8 +7,6 @@ jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
-    environment:
-      AWS_REGION: "us-west-2"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,16 +16,16 @@ jobs:
         with:
           terraform_version: "1.1.7"
 
+      - name: Configure AWS Credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.VTAIKAR_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.VTAIKAR_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
         run: terraform plan -no-color
 
-      # Optionally, include steps for validating or other pre-apply checks
-
       - name: Terraform Apply
-        if: github.event_name == 'workflow_dispatch'
         run: terraform apply -auto-approve
-
-      # Add more steps as needed (e.g., outputs, notifications)
