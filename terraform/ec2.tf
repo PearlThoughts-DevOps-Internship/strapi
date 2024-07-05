@@ -7,7 +7,7 @@ resource "aws_instance" "vyankateshTec2" {
 
   key_name                    = "my-key"
   associate_public_ip_address = true
-  user_data = file("user_data_strapi.sh")         
+  user_data = file("user_data.sh")         
   
   tags = {
     Name = "StrapiEC2"
