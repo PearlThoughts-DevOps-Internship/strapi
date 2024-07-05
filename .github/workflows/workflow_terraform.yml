@@ -1,6 +1,9 @@
 name: 'Terraform manual start -anand'
 on:
-  workflow_dispatch:
+ push:
+  branches:
+    - anand
+  
 env:
   TERRAFORM_VERSION: '1.8.5'
 jobs:
