@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "ims-conf-bucket"
-    region  = "ap-south-1"
+    region  = "ap-southeast-1"
     key     = "anand/node-hello-app/terraform.tfstate"
     encrypt = true
   }
