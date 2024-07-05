@@ -8,7 +8,7 @@ resource "aws_instance" "ec2-node-server2" {
 
 
   tags = {
-    Name = "Anand-terraform1"
+    Name = "Anand-terraform-new"
   }
 
   provisioner "remote-exec" { # keep this block inside resource block and save hours of time on the internet
@@ -33,7 +33,7 @@ resource "aws_instance" "ec2-node-server2" {
       type = "ssh"
       user = "ubuntu"
       private_key = "nandhu159" 
-      host        = aws_instance.ec2-node-server2.public_dns
+      host        = self.public_ip
     }
   }
 
