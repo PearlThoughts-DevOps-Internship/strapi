@@ -1,0 +1,68 @@
+name: build-and-deploy
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+        working-directory: ./strapi-project
+
+      - name: Build Strapi project
+        run: npm run build
+        working-directory: ./strapi-project
+
+      - name: Start SSH agent and add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.STRAPI_EC2_KEY }}
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.GOWTHAM_EC2_HOST }}
+          username: ${{ secrets.GOWTHAM_EC2_USER }}
+          key: ${{ secrets.STRAPI_EC2_KEY }}
+          script: |
+            # set -e
+            # exec > >(tee -i /tmp/deploy.log)
+            # exec 2>&1
+
+            echo "Navigating to project directory"
+            cd /home/ubuntu/strapi/strapi-project
+
+            echo "Fixing ownership and permissions"
+            sudo chown -R $USER:$USER /home/ubuntu/strapi
+            sudo chown -R $USER:$USER /home/ubuntu/strapi/strapi-project
+
+            echo "Adding exception for safe directory"
+            git config --global --add safe.directory /home/ubuntu/strapi
+
+            echo "Pulling latest code from master branch"
+            git pull origin master
+
+            echo "Fixing npm permissions"
+            sudo chown -R $USER:$USER ~/.npm
+
+            echo "Installing dependencies"
+            npm install --legacy-peer-deps
+
+            echo "Building the project"
+            npm run build
+
+            echo "Starting or restarting the application with PM2"
+            pm2 start npm --name "strapi-project" -- run start || pm2 restart strapi-project
+
+            echo "Deployment completed"
