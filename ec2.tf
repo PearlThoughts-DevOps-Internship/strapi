@@ -3,11 +3,11 @@ resource "aws_instance" "ec2-node-server2" {
   instance_type          = "t3a.small"
   vpc_security_group_ids = [aws_security_group.HelloSG.id]
   subnet_id              = "subnet-0d45f137e4b451d4d"
-  key_name               = "nandhu159"
+  key_name               = "nandhu159.pem"
 
 
   tags = {
-    Name = "terraform-aws-Ubuntu_debian_based"
+    Name = "Anand-terraform"
   }
 
   provisioner "remote-exec" { # keep this block inside resource block and save hours of time on the internet
@@ -31,9 +31,8 @@ resource "aws_instance" "ec2-node-server2" {
     connection {
       type = "ssh"
       user = "ubuntu"
-      private_key = "nandhu159" 
-      host        = self.public_ip
-
+      private_key = "nandhu159.pem" 
+      host        = aws_instance.ec2-node-server2.public_dns
     }
   }
 
