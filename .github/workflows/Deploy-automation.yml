@@ -3,7 +3,7 @@ name: Terraform Automated
 on:
   push:
     branches:
-      - main  # Triggered on push to main branch
+      - vyankateshwarT  # Triggered on push to main branch
 
 jobs:
   terraform:
