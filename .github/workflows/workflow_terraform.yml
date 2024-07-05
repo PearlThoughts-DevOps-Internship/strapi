@@ -1,13 +1,10 @@
 name: 'Terraform manual start'
 on:
-  # push:
-  #   branches: [ "somesh" ]
   workflow_dispatch:
 env:
   TERRAFORM_VERSION: '1.8.5'
 jobs:
   terraform:
-    environment: Somesh_DEV
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -16,8 +13,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.CSR_ACCESS_KEYS }}
-          aws-secret-access-key: ${{ secrets.CSR_SECRECT_ACCESS_KEYS }}
+          aws-access-key-id: ${{ secrets.ANAND_ACCESS_KEYS }}
+          aws-secret-access-key: ${{ secrets.ANAND_SECRECT_ACCESS_KEYS }}
           aws-region: ap-south-1
           
       - name: Set up Terraform
@@ -36,7 +33,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan -var="ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}"
+        run: terraform plan 
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -44,4 +41,4 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve
