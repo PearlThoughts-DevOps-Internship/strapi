@@ -3,7 +3,7 @@ resource "aws_instance" "ec2-node-server2" {
   instance_type          = "t3a.small"
   vpc_security_group_ids = [aws_security_group.HelloSG.id]
   subnet_id              = "subnet-0d45f137e4b451d4d"
-  key_name               = "nandhu159.pem"
+  key_name               = "nandhu159"
 
 
   tags = {
@@ -31,7 +31,7 @@ resource "aws_instance" "ec2-node-server2" {
     connection {
       type = "ssh"
       user = "ubuntu"
-      private_key = "nandhu159.pem" 
+      private_key = "nandhu159" 
       host        = aws_instance.ec2-node-server2.public_dns
     }
   }
