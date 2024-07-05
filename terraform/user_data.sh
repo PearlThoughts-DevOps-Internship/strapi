@@ -14,7 +14,7 @@ cd /srv/
 
 # clone strapi app 
 git clone https://github.com/VyankateshwarTaikar/strapi2_product.git
-cd strapi/
+cd strapi2_product/
 
 # run application 
 pm2 start npm --name strapi -- run start
