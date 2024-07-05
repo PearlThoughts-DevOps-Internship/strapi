@@ -23,9 +23,12 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./terraform  # Specify the directory containing your Terraform files
 
       - name: Terraform Plan
         run: terraform plan -no-color
+        working-directory: ./terraform  # Specify the directory containing your Terraform files
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+        working-directory: ./terraform  # Specify the directory containing your Terraform files

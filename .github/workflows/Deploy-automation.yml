@@ -3,7 +3,7 @@ name: Terraform Automated
 on:
   push:
     branches:
-      - vyankateshwarT  # Triggered on push to main branch
+      - main  # Triggered on push to main branch
 
 jobs:
   terraform:
@@ -25,12 +25,15 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./terraform  # Specify the directory containing your Terraform files
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve || true  # Destroy existing infrastructure
+        working-directory: ./terraform  # Specify the directory containing your Terraform files
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+        working-directory: ./terraform  # Specify the directory containing your Terraform files
 
       - name: Deploy Strapi Application
         run: |
