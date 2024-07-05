@@ -1,9 +1,9 @@
 resource "aws_instance" "ec2-node-server2" {
-  ami                    = "ami-05e00961530ae1b55" #from https://bitnami.com/stack/nodejs/cloud/aws/amis
+  ami                    = "ami-05e00961530ae1b55" 
   instance_type          = "t3a.small"
   vpc_security_group_ids = [aws_security_group.HelloSG.id]
   subnet_id              = aws_subnet.subnet1.id
-  key_name               = "NestJs_server"
+  key_name               = "nandhu159"
 
 
   tags = {
@@ -19,7 +19,7 @@ resource "aws_instance" "ec2-node-server2" {
       "sudo npm install -g yarn",
       "sudo apt-get install git -y",
       "sudo npm install -g pm2 ",
-      "git clone --single-branch --branch somesh https://github.com/PearlThoughts-DevOps-Internship/strapi.git",
+      "git clone --single-branch --branch anand https://github.com/PearlThoughts-DevOps-Internship/strapi.git",
       "cd strapi/",
       "git pull",
       "npm install",
@@ -31,11 +31,8 @@ resource "aws_instance" "ec2-node-server2" {
     connection {
       type = "ssh"
       user = "ubuntu"
-      #private_key = file("/home/somesh/Desktop/AWS_IAC/nestjsserver.pem") # Replace with your private key path
       private_key = var.ssh_private_key
       host        = self.public_ip
-      #private_key = aws_key_pair.deployer.id
-      #private_key = aws_key_pair.deployer.id
 
     }
   }
