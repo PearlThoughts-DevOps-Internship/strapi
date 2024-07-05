@@ -1,7 +1,7 @@
 resource "aws_security_group" "HelloSG" {
   name        = "HelloSG"
   description = "Allow Port 1337 80 22"
-  vpc_id      = vpc-0f8ecbe8bb5457e2e
+  vpc_id      = "vpc-0f8ecbe8bb5457e2e"
 
   ingress {
     from_port   = 1337
