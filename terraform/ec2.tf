@@ -41,7 +41,3 @@ resource "aws_security_group" "strapiEC2-sg" {
     Name = "Strapi-sg"
   }
 }
-
-output "instance_ip" {
-  value = aws_instance.vyankateshTec2.public_ip
-}
