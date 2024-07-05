@@ -35,6 +35,9 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ./terraform  # Specify the directory containing your Terraform files
 
+      - name: Wait for instance to be ready
+        run: sleep 180  # Adjust the wait time as needed to allow the instance to be ready
+
       - name: Deploy Strapi Application
         run: |
           cd /srv/strapi2_product/
