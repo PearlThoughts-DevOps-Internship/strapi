@@ -4,10 +4,11 @@ resource "aws_instance" "ec2-node-server2" {
   vpc_security_group_ids = [aws_security_group.HelloSG.id]
   subnet_id              = "subnet-0d45f137e4b451d4d"
   key_name               = "nandhu159"
+  associate_public_ip_address = true
 
 
   tags = {
-    Name = "Anand-terraform"
+    Name = "Anand-terraform1"
   }
 
   provisioner "remote-exec" { # keep this block inside resource block and save hours of time on the internet
